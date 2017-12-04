@@ -7,9 +7,10 @@ import * as actions from '../actions';
 class ListItem extends Component {
     //helper method
     renderDescription() {
-        const {library, selectedLibraryId} = this.props;
+        const {library, expanded} = this.props;
 
-        if (library.id === selectedLibraryId) {
+        // critical point and decision - if this library is currently selected then to this thing.
+        if (expanded) {
             return (
                 // JSX of expanded component with description
                 <Text>{library.description}</Text>
@@ -45,9 +46,14 @@ const styles = {
     }
 };
 
-// It will return a PLAIN JS OBJECT and that object will show up as props to our component!
-const mapStateToProps = state => {
-    return { selectedLibraryId: state.selectedLibraryId };
+// It will return a PLAIN JS OBJECT and that object will show up as props to our component!.
+// ownProps - argument named by convention. We put the logic of deciding to expand into this function.
+// ownProps are the props where passed down to the component that we're wrapping (here ListItem in connect()).
+const mapStateToProps = (state, ownProps)  => {
+
+    const expanded = state.selectedLibraryId === ownProps.library.id; //if it's equal then expanded will be true
+
+    return { expanded: expanded }; //key and value are identical so we can write it also return { expanded };
 };
 
 

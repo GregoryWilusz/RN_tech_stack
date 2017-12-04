@@ -1,10 +1,22 @@
 import React, {Component} from 'react';
-import {Text, TouchableWithoutFeedback, View} from 'react-native';
+import {
+    Text,
+    TouchableWithoutFeedback,
+    View,
+    LayoutAnimation
+} from 'react-native';
 import {connect} from 'react-redux'; // it's like a window to the whole world of redux. We used it to get access to the state, but also we can call an action creator
 import {CardSection} from "./common";
 import * as actions from '../actions';
 
 class ListItem extends Component {
+
+    // Lifecycle methods - all we have to do is define them and they will automatically be called for us.
+    // This particular one - componentWillUpdate - is called whenever the component is about to be rerenderd to the device.
+    componentWillUpdate() {
+        LayoutAnimation.spring();
+    }
+
     //helper method
     renderDescription() {
         const {library, expanded} = this.props;
@@ -13,7 +25,12 @@ class ListItem extends Component {
         if (expanded) {
             return (
                 // JSX of expanded component with description
-                <Text>{library.description}</Text>
+                // flex: 1 - wrap the text in the screen area only
+                <CardSection>
+                    <Text style={{flex: 1}}>
+                        {library.description}
+                    </Text>
+                </CardSection>
             );
         }
     }

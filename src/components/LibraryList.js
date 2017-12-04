@@ -1,11 +1,37 @@
 import React, {Component} from 'react';
+import {ListView} from 'react-native';
 import { connect } from 'react-redux'; // Connect helper is a function to get the data from a store.
+import ListItem from './ListItem';
 
 class LibraryList extends Component {
+
+    //initializing a data source for ListView
+    componentWillMount() {
+        // WHen we create a ListView we have to tell it exactly what sorts of data to use
+        const ds = new ListView.DataSource({
+           rowHasChanged: (r1, r2) => r1 !== r2
+        });
+
+        //ds - data source object (ours) which is "telling" - take the list of libraries and be going to use this list to render a list of data
+        this.dataSource = ds.cloneWithRows(this.props.libraries);
+
+    }
+    // Telling a ListView: if you want to render just a single row, please execute the renderRow() function
+    // Argument 'library' is to pass the information pass down into this ListItem (element in the list that is trying to render). It says: ListItem you are supposed to show particular library right
+    renderRow(library) {
+        return <ListItem library={library} />;
+    }
+
     render() {
-        console.log(this.props); // props object should have a libraries prop to it with the value of state.libraries (list of libraries). In console we now can see an object with the property of
+        // console.log(this.props); // props object should have a libraries prop to it with the value of state.libraries (list of libraries). In console we now can see an object with the property of
                                 // dispatch which is a function. And property of libraries that contains all objects.
-        return;
+        // We also have to tell the ListView how to render a very specific row
+        return (
+            <ListView
+                dataSource={this.dataSource}
+                renderRow={this.renderRow}
+            />
+        );
     }
 }
 
